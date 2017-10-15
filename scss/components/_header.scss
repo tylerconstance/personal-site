@@ -1,0 +1,90 @@
+.header{
+  &__container {
+    background-image: url(http://tylerconstance.com/images/bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 300px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 40px;
+  }
+  &__text {
+    color: white;
+    text-shadow: 0px 1px 1px black;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 22px;
+  }
+  &__icon-container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    margin-top: -40px;
+    &::before,
+    &::after {
+      content: "";
+      display: block;
+      position: relative;
+      height: 40px;
+      width: 100%;
+      width: calc(50vw - 40px);
+      background: white;
+    }
+  }
+  &__icon {
+    margin: 0 auto;
+    width: 80px;
+    height: 80px;
+    overflow:hidden;
+    
+    position: absolute;
+    left: calc(50% - 40px);
+    bottom: 0px;
+    
+    &::after {
+      box-sizing: border-box;
+      content: "";
+      height: 80px;
+      width: 80px;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      display: block;
+      // box-shadow: 0 40px 0 15px red;
+      box-shadow: 0 40px 0 15px white;
+      border-radius: 50%;
+      border: 2px solid white;
+      background: url("http://tylerconstance.com/images/logo.png");
+      background-size: 50%;
+      background-position: center center;
+      background-repeat: no-repeat;
+      
+    }
+  }
+}
+
+.page__body-container {
+  margin: 0 auto;
+  width: 80%;
+  max-width: 900px;
+}
+
+.page__body {
+  color: #333;
+  font-size: 18px;
+}
+
+.page__title {
+  font-size: 40px;
+  padding: 20px 0;
+  font-weight: 800;
+}
+
+p {
+  margin-bottom: 15px;
+  line-height: 1.5;
+}

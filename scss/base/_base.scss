@@ -1,0 +1,52 @@
+* {
+  font-family: $font-stack;
+  line-height: 1.5;
+  color: $type-grey;
+}
+
+img {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+a, div, p, h1 {
+  font-family: $font-stack;
+  color: $type-grey;
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 32px;
+  margin: 20px 0 30px;
+}
+
+.container {
+  width: 90%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+p {
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+a {
+  color: $blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.site {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.main {
+  flex-grow: 1;
+}
+
+.no-underline {
+  text-decoration: none;
+}
