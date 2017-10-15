@@ -1,5 +1,6 @@
 const autoprefixer = require('gulp-autoprefixer');
 const gulp = require('gulp');
+const browserSync = require('browser-sync');
 const maps = require('gulp-sourcemaps');
 const sass = require('gulp-sass');
 const plumber = require('gulp-plumber');
@@ -22,6 +23,15 @@ const config = {
   // Images go in the build directory. If not using a single build directory,
   // they might not be built at all.
 };
+
+gulp.task('serve', ['all'], function() {
+  browserSync.init({
+    server: './build'
+  });
+
+  gulp.watch('scss/**/*.scss').on('change', browserSync.reload);
+  gulp.watch('html/*.html').on('change', browserSync.reload);
+});
 
 gulp.task('sass', function() {
   return gulp.src(config.sass)
@@ -56,7 +66,7 @@ gulp.task('clean', function() {
 
 gulp.task('all', ['sass', 'html', 'img']);
 
-gulp.task('watch', ['all'], function() {
+gulp.task('watch', ['serve'], function() {
   gulp.watch(config.sass, ['sass']);
   gulp.watch(config.html, ['html']);
   gulp.watch(config.img, ['img']);
