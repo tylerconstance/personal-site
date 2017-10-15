@@ -29,7 +29,7 @@ gulp.task('serve', ['all'], function() {
     server: './build'
   });
 
-  gulp.watch('scss/**/*.scss').on('change', browserSync.reload);
+  gulp.watch('scss/**/*.scss');
   gulp.watch('html/*.html').on('change', browserSync.reload);
 });
 
@@ -47,7 +47,8 @@ gulp.task('sass', function() {
       cascade: false,
     }))
     .pipe(maps.write('./')) // puts them in the directory with the CSS
-    .pipe(gulp.dest(config.css));
+    .pipe(gulp.dest(config.css))
+    .pipe(browserSync.stream());
 });
 
 gulp.task('html', function() {
