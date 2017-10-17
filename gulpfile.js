@@ -57,13 +57,12 @@ gulp.task('html', function() {
 });
 
 gulp.task('img', function() {
-  console.log("Going to " + config.build + '/img/');
   return gulp.src(config.img)
     .pipe(gulp.dest(config.build + '/img/'));
 });
 
 gulp.task('clean', function() {
-  del(['build']);
+  del.sync(['build/**']);
 });
 
 gulp.task('all', ['sass', 'html', 'img']);
