@@ -10,6 +10,10 @@
     justify-content: center;
     align-items: center;
     padding-bottom: 40px;
+
+    &--voting-record {
+      background-image: url(img/city-hall.jpg);
+    }
   }
   &__text {
     color: white;
