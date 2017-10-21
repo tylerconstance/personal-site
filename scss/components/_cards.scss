@@ -18,7 +18,9 @@
 }
 
 .card {
+
 	&__container {
+		text-decoration: none;
 		background: white;
 		display: flex;
 		flex-direction: column;
