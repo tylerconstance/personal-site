@@ -4,9 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "npx npm-force-resolutions"
   },
-  "author": "",
+  "resolutions": {
+    "graceful-fs": "^4.2.4"
+  },
+  "author": "Tyler Constance",
   "license": "ISC",
   "devDependencies": {
     "browser-sync": "^2.18.13",
