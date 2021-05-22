@@ -1,3 +1,6 @@
+html {
+  font-size: 118.75%; // 19px
+}
 * {
   font-family: $font-stack;
   line-height: 1.5;
@@ -12,6 +15,7 @@ img {
 a, div, p, h1 {
   font-family: $font-stack;
   color: $type-grey;
+  line-height: 1.5;
 }
 
 h1 {
@@ -34,7 +38,9 @@ p {
 a {
   color: $blue;
   text-decoration: underline;
+  text-decoration: none;
   cursor: pointer;
+  font-weight: 500;
 }
 
 .site {

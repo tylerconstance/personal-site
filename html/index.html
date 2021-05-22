@@ -19,58 +19,91 @@
     <div class="page__body-container">
 
     <div class="about__container">
-      <img src="img/headshot.jpg" alt="" class="about__img">
+      <div class="about__img-container">
+        <img src="img/headshot.jpg" alt="" class="about__img">
+        <div class="nowplaying__container">
+          <p class="nowlistening">Now listening…</p>
+          <div class="nowplayingcard" id="card">
+            <div class="nowplayingcontainer-inner">
+              <img id="trackart" src="#">
+              <div class="trackInfo">
+                <a id="tracktitle"></a>
+                <p id="trackartist"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="about__text-container">
         <div class="about__text-title">Hi, I'm Tyler.</div>
-        <div class="about__text-body">I'm a web developer in Portland, Maine. I mostly write code, but I have a knack for visual and UX design, and <a href="https://tylerconstancephotography.com">I'm a pretty nifty photographer</a> too. If you want to get in touch, you can email me at tyler@tylerconstance.com.</div>
+        <div class="about__text-body">I'm a software engineer in Portland, Maine with too many hobbies. I make <a href="https://tylerconstancephotography.com">photographs</a>, produce a tiny <a href="https://understatedaudio.com">podcast</a>, and maintain a <a href="https://blog.tylerconstance.com">personal blog</a>.</div>
+        <div class="about__text-body">I like the tiny corners of the internet where thoughtful people make and share little things with an intentionally small audience.</div>
+        <div class="about__text-body">Say hi: tyler@tylerconstance.com.</div>
       </div>
     </div>
 
-    <section class="section">
+    <script>
+      
+      /**
+    Forked from Prashant Shrestha
+      + https://prashant.me
 
-    <div class="section__title">Project Highlights</div>
+      Kept the CSS, replaced the jQuery with vanilla JS
+    */
+    const lastfmData = {
+      baseUrl:
+        "https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=",
+      // Your Last.fm Username
+      user: "spishnittle",
+      // Your API key
+      // I actually borrowed this one from another codepen; sorry!
+      api_key: "7fad6b09c99e8e11ccad0c568b4abf0d",
+      // api_key: "TEST",
+      additional: "&format=json&limit=1"
+    };
 
-    <div class="cards">
-      <div class="cards__container">
-        <a href="/voting-record" class="card__container">
-          <img src="img/city-hall.jpg" alt="Portland's City Hall" class="card__img">
-          <div class="card__text">
-            <div class="card__title">Voting Record</div>
-            <div class="card__description">A work-in-progress to record Portland's City Council votes</div>
-          </div>
-        </a>
+    const fetchUrl = `${lastfmData.baseUrl}${lastfmData.user}&api_key=${lastfmData.api_key}${lastfmData.additional}`;
 
-        <a href="/nearpeer" class="card__container">
-          <img src="img/nearpeer-logo.jpg" alt="Nearpeer Logo" class="card__img">
-          <div class="card__text">
-            <div class="card__title">Nearpeer</div>
-            <div class="card__description">A social network for college students</div>
-          </div>
-        </a>
+    const getSetLastFM = async () => {
+      const res = await fetch(`${lastfmData.baseUrl}${lastfmData.user}&api_key=${lastfmData.api_key}${lastfmData.additional}`);
+    const resp = await res.json();
+    if (!res.ok) {
+      document.querySelector(".nowplaying__container").style.display = "block";
+      return;
+    }
+      const recentTrack = resp.recenttracks.track[0];
+      const listenedAtUts = parseInt(recentTrack.date.uts);
+      const nowUts = Math.floor(Date.now() / 1000);
 
-        <a href="/photo-site" class="card__container">
-          <img src="https://tylerconstancephotography.com/wp-content/uploads/2014/08/YaeJin-3-1024x821.jpg" alt="Portland's City Hall" class="card__img">
-          <div class="card__text">
-            <div class="card__title">Photo Site</div>
-            <div class="card__description">Portraiture &amp; Fine Art Photography</div>
-          </div>
-        </a>
-      </div>
+      const secondsAgoListened = nowUts - listenedAtUts;
+      // the last.fm API should have a nowplaying attr, but doesn't seem to be sending one down (there's an open github issue)
+      // So, we'll check to see if the user has played anything in the last 10 or 20 minutes
+      // const isPlayingNow = recentTrack.nowplaying;
+      // console.log(secondsAgoListened);
+      // console.log(`Listening ${Math.floor(secondsAgoListened / 60)} minutes ago`)
+      const tenMinutes = 600; // seconds
+      const twentyMinutes = tenMinutes * 2;
+      const isPlayingNow = secondsAgoListened < twentyMinutes;
+      if (isPlayingNow) {
+        document.querySelector(".nowplaying__container").style.display = "block";
+      }
+      
+      document.querySelector("#tracktitle").textContent = `🎧 ${recentTrack.name}`;
+      document.querySelector("#tracktitle").href = recentTrack.url;
+      document.querySelector("#tracktitle").target = "_blank";
+      document.querySelector("#trackart").src = recentTrack.image[2]["#text"];
+      document.querySelector("#trackartist").textContent = recentTrack.artist["#text"];
+    }
+
+    // Get the new one.
+    getSetLastFM();
+    // Check again in 30s.
+    window.setInterval(getSetLastFM, 30 * 1000);
+
+    </script>
+
     </div>
-
-    </section>
   </div>
-
-    <footer class="footer homepage" style="display: flex; justify-content: center; align-items: center;">
-
-      <a href="https://github.com/tylerconstance">
-        <svg aria-hidden="true" class="footer-logo" style="width: auto" height="32" version="1.1" viewBox="0 0 16 16" width="32"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
-      </a>
-
-      <a href="https://twitter.com/tylerconstance"><svg id="twitter-logo" class="footer-logo" data-name="Logo — FIXED" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><defs><style>.cls-1{fill:none;}.cls-2{fill:#1da1f2;}</style></defs><title>Twitter_Logo_Blue</title><rect class="cls-1" width="400" height="400"/><path class="cls-2" d="M153.62,301.59c94.34,0,145.94-78.16,145.94-145.94,0-2.22,0-4.43-.15-6.63A104.36,104.36,0,0,0,325,122.47a102.38,102.38,0,0,1-29.46,8.07,51.47,51.47,0,0,0,22.55-28.37,102.79,102.79,0,0,1-32.57,12.45,51.34,51.34,0,0,0-87.41,46.78A145.62,145.62,0,0,1,92.4,107.81a51.33,51.33,0,0,0,15.88,68.47A50.91,50.91,0,0,1,85,169.86c0,.21,0,.43,0,.65a51.31,51.31,0,0,0,41.15,50.28,51.21,51.21,0,0,1-23.16.88,51.35,51.35,0,0,0,47.92,35.62,102.92,102.92,0,0,1-63.7,22A104.41,104.41,0,0,1,75,278.55a145.21,145.21,0,0,0,78.62,23"/></svg></a>
-
-      <a href="https://instagram.com/tylerconstance"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2476 2476" class="footer-logo instagram-logo footer-logo--instagram"><path d="M825.4 1238c0-227.9 184.7-412.7 412.6-412.7 227.9 0 412.7 184.8 412.7 412.7 0 227.9-184.8 412.7-412.7 412.7-227.9 0-412.6-184.8-412.6-412.7m-223.1 0c0 351.1 284.6 635.7 635.7 635.7s635.7-284.6 635.7-635.7-284.6-635.7-635.7-635.7S602.3 886.9 602.3 1238m1148-660.9c0 82 66.5 148.6 148.6 148.6 82 0 148.6-66.6 148.6-148.6s-66.5-148.5-148.6-148.5-148.6 66.5-148.6 148.5M737.8 2245.7c-120.7-5.5-186.3-25.6-229.9-42.6-57.8-22.5-99-49.3-142.4-92.6-43.3-43.3-70.2-84.5-92.6-142.3-17-43.6-37.1-109.2-42.6-229.9-6-130.5-7.2-169.7-7.2-500.3s1.3-369.7 7.2-500.3c5.5-120.7 25.7-186.2 42.6-229.9 22.5-57.8 49.3-99 92.6-142.4 43.3-43.3 84.5-70.2 142.4-92.6 43.6-17 109.2-37.1 229.9-42.6 130.5-6 169.7-7.2 500.2-7.2 330.6 0 369.7 1.3 500.3 7.2 120.7 5.5 186.2 25.7 229.9 42.6 57.8 22.4 99 49.3 142.4 92.6 43.3 43.3 70.1 84.6 92.6 142.4 17 43.6 37.1 109.2 42.6 229.9 6 130.6 7.2 169.7 7.2 500.3 0 330.5-1.2 369.7-7.2 500.3-5.5 120.7-25.7 186.3-42.6 229.9-22.5 57.8-49.3 99-92.6 142.3-43.3 43.3-84.6 70.1-142.4 92.6-43.6 17-109.2 37.1-229.9 42.6-130.5 6-169.7 7.2-500.3 7.2-330.5 0-369.7-1.2-500.2-7.2M727.6 7.5c-131.8 6-221.8 26.9-300.5 57.5-81.4 31.6-150.4 74-219.3 142.8C139 276.6 96.6 345.6 65 427.1 34.4 505.8 13.5 595.8 7.5 727.6 1.4 859.6 0 901.8 0 1238s1.4 378.4 7.5 510.4c6 131.8 26.9 221.8 57.5 300.5 31.6 81.4 73.9 150.5 142.8 219.3 68.8 68.8 137.8 111.1 219.3 142.8 78.8 30.6 168.7 51.5 300.5 57.5 132.1 6 174.2 7.5 510.4 7.5 336.3 0 378.4-1.4 510.4-7.5 131.8-6 221.8-26.9 300.5-57.5 81.4-31.7 150.4-74 219.3-142.8 68.8-68.8 111.1-137.9 142.8-219.3 30.6-78.7 51.6-168.7 57.5-300.5 6-132.1 7.4-174.2 7.4-510.4s-1.4-378.4-7.4-510.4c-6-131.8-26.9-221.8-57.5-300.5-31.7-81.4-74-150.4-142.8-219.3C2199.4 139 2130.3 96.6 2049 65c-78.8-30.6-168.8-51.6-300.5-57.5-132-6-174.2-7.5-510.4-7.5-336.3 0-378.4 1.4-510.5 7.5"/></svg></a></footer>
-    </div>
 
 </body>
 </html>
