@@ -15,6 +15,15 @@ $globalBorderRadius: 5px;
   border-bottom-left-radius: $radius;
 }
 
+@keyframes pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: .3;
+  }
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -26,6 +35,8 @@ body {
     margin: 15px 0 5px;
     font-size: 13px;
     font-weight: 500;
+    animation: pulse 1s infinite alternate ease-in-out;
+    color: #4e7ec7;
   }
   .nowplayingcard {
     // min-width: 200px;
@@ -48,9 +59,9 @@ body {
       border-radius: $globalBorderRadius;
       overflow: hidden;
 
-      &:hover {
-        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-      }
+      // &:hover {
+      //   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+      // }
 
       img#trackart {
         max-width: 30%;
